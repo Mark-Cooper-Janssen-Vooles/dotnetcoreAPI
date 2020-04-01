@@ -226,3 +226,26 @@ services.AddSwaggerGen(options => {
     options.IncludeXmlComments(cmlCommentsFullPath);
 });
 ````
+
+To fix up response types in swagger, need to add "producesResponseType", like so: 
+````cs
+/// <summary>
+    /// Get list of national parks.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ProducesResponseType(200, Type = typeof(List<NationalParkDto>))] //need to add this (returning Ok() is a 200 response type)
+    [ProducesResponseType(400)] // and this (auto handled by dotnet core)
+    public IActionResult GetNationalParks()
+    {
+      var objList = _npRepository.GetNationalParks();
+      var objDto = new List<NationalParkDto>();
+
+      foreach(var obj in objList) {
+        objDto.Add(_mapper.Map<NationalParkDto>(obj));
+      }
+
+      return Ok(objDto);
+    }
+````
+
