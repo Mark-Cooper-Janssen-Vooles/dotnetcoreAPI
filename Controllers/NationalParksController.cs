@@ -75,7 +75,7 @@ namespace dotnetCoreAPI.Controllers
     }
 
     [HttpPost]
-    [ProducesResponseType(201, Type = typeof(NationalParkDto))]
+    [ProducesResponseType(201, Type = typeof(NationalPark))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(500)]
     public IActionResult CreateNationalPark([FromBody] NationalParkDto nationalParkDto)

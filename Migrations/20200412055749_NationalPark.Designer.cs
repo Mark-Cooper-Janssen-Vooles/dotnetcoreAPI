@@ -10,8 +10,8 @@ using dotnetCoreAPI.Data;
 namespace dotnetCoreAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200329041657_AddNationalParkToDb")]
-    partial class AddNationalParkToDb
+    [Migration("20200412055749_NationalPark")]
+    partial class NationalPark
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,45 @@ namespace dotnetCoreAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NationalParks");
+                });
+
+            modelBuilder.Entity("dotnetCoreAPI.Models.Trail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NationalParkId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NationalParkId");
+
+                    b.ToTable("Trails");
+                });
+
+            modelBuilder.Entity("dotnetCoreAPI.Models.Trail", b =>
+                {
+                    b.HasOne("dotnetCoreAPI.Models.NationalPark", "NationalPark")
+                        .WithMany()
+                        .HasForeignKey("NationalParkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

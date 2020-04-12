@@ -2,7 +2,7 @@
 
 ## To get it running
 - ``docker ps`` to check if docker container is running, if it isnt: ``docker start sql_server_dotnetAPI_demo``
-- to see inside database type: ``mark$ mssql -d 'Parky' -u sa -p reallyStrongPwd123`` (where 'Parky' is the name of the database)
+- to see inside database type: ``mssql -d 'Parky' -u sa -p reallyStrongPwd123`` (where 'Parky' is the name of the database)
 - to perform a query, type: ``SELECT * FROM NationalParks`` (sql stuff)
 
 api means "Application Programming Interface" => a software intermediary that allows two applications to talk to each other
@@ -249,3 +249,28 @@ To fix up response types in swagger, need to add "producesResponseType", like so
     }
 ````
 
+````cs
+[ApiController]
+  [Route("api/[controller]")]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)] //since 404 is generic accross all routes, can add this to the top before the class!
+  public class NationalParksController : ControllerBase
+  {
+    private readonly INationalParkRepository _npRepository;
+    private ...
+````
+
+
+===
+
+### Order for adding trails
+
+1. Add model to models file: 
+create Tails.cs => fill out class file
+2. Add dto to models=>dtos file:
+3. Add trail repository 
+4. Add trail interface (ITrailRepository)
+5. Add migration... ``dotnet ef migrations add AddTrailToDb`` and ``dotnet ef database update``
+
+What is a repository?
+"Conceptually, a Repository encapsulates the set of objects persisted in a data store and the operations performed over them, providing a more object-oriented view of the persistence layer"
+(In this project, it seperates out some logic from the controller)
