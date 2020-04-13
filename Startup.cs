@@ -56,6 +56,25 @@ namespace dotnetCoreAPI
                             Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
                         }
                     });
+
+                    // options.SwaggerDoc("ParkyOpenAPISpecT",
+                    // new Microsoft.OpenApi.Models.OpenApiInfo() {
+                    //     Title = "Parky API (Trails)",
+                    //     Version = "1",
+                    //     Description = "Udemy Parky API Trails",
+                    //     Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                    //     {
+                    //         Email = "m_arch@outlook.com.au",
+                    //         Name = "Mark Janssen",
+                    //         Url = new Uri("https://github.com/Mark-Cooper-Janssen-Vooles")
+                    //     },
+                    //     License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                    //     {
+                    //         Name = "MIT License",
+                    //         Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                    //     }
+                    // });
+
                 var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var cmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
                 options.IncludeXmlComments(cmlCommentsFullPath);
@@ -74,7 +93,8 @@ namespace dotnetCoreAPI
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(options => {
-                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky API");
+                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky API National Parks");
+                // options.SwaggerEndpoint("/swagger/ParkyOpenAPISpecT/swagger.json", "Parky API Trails");
                 options.RoutePrefix = "";
             });
             app.UseRouting();

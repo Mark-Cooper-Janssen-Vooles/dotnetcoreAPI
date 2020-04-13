@@ -14,6 +14,7 @@ namespace dotnetCoreAPI.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  // [ApiExplorerSettings(GroupName = "ParkyOpenAPISpecNP")]
   [ProducesResponseType(StatusCodes.Status400BadRequest)] //since 404 is generic accross all routes, can add this to the top before the class!
   public class NationalParksController : ControllerBase
   {

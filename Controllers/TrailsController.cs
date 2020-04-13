@@ -14,6 +14,7 @@ namespace dotnetCoreAPI.Controllers
 {
   [ApiController]
   [Route("api/trails")]
+  // [ApiExplorerSettings(GroupName = "ParkyOpenAPISpecT")]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailsController : ControllerBase
   {

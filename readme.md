@@ -274,3 +274,11 @@ create Tails.cs => fill out class file
 What is a repository?
 "Conceptually, a Repository encapsulates the set of objects persisted in a data store and the operations performed over them, providing a more object-oriented view of the persistence layer"
 (In this project, it seperates out some logic from the controller)
+
+===
+
+### Versioning
+
+For versioning, make a copy of a controller and call if V2
+
+need to install two new packages: ``dotnet add package Microsoft.AspNetCore.Mvc.Versioning``
