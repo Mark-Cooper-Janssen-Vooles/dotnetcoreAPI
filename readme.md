@@ -281,4 +281,36 @@ What is a repository?
 
 For versioning, make a copy of a controller and call if V2
 
-need to install two new packages: ``dotnet add package Microsoft.AspNetCore.Mvc.Versioning``
+need to install two new packages: ``dotnet add package Microsoft.AspNetCore.Mvc.Versioning`` and ``dotnet add package Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer``
+
+in startup.cs add 
+````cs
+services.AddApiVersioning(options => 
+{
+  options.AssumeDefaultVersionWhenUnspecified = true;
+  options.DefaultApiVersion = new ApiVersion(1, 0);
+  options.ReportApiVersions = true;
+});
+````
+
+=== 
+
+### changing the database tables
+
+- in the model, add a field (and DTO too)
+- start a new migration: ``dotnet ef migrations add NationalPark`` and ``dotnet ef database update``
+
+
+
+### Authorization 
+
+For the API inheriting from Controller is what you do when using MVC, but optimal is inheriting from ControllerBase
+
+In the controller, for one of the methods add ``[Authorize]`` 
+
+Now when you hit the api, it doesn't work because you're not authorized...
+Enable users to be authorized => create a user.cs model
+run migrations / update
+create IUserRepository and UserRepository
+
+**up to 78

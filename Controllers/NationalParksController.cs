@@ -9,11 +9,14 @@ using dotnetCoreAPI.Models.Dtos;
 using dotnetCoreAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnetCoreAPI.Controllers
 {
   [ApiController]
-  [Route("api/[controller]")]
+  // [Route("api/[controller]")]
+  [Route("api/v{version:apiVersion}/nationalparks")]
+  [ApiVersion("1.0")]
   // [ApiExplorerSettings(GroupName = "ParkyOpenAPISpecNP")]
   [ProducesResponseType(StatusCodes.Status400BadRequest)] //since 404 is generic accross all routes, can add this to the top before the class!
   public class NationalParksController : ControllerBase
@@ -54,6 +57,7 @@ namespace dotnetCoreAPI.Controllers
     [ProducesResponseType(200, Type = typeof(NationalParkDto))]
     [ProducesResponseType(404)]
     [ProducesDefaultResponseType]
+    [Authorize]
     public IActionResult GetNationalPark(int nationalParkId)
     {
       var obj = _npRepository.GetNationalPark(nationalParkId);
@@ -101,7 +105,7 @@ namespace dotnetCoreAPI.Controllers
       }
 
       //createdAtRoute takes route name, route value, final values. Returns a 201 Created
-      return CreatedAtRoute("GetNationalPark", new { id = nationalParkObj.Id}, nationalParkObj);
+      return CreatedAtRoute("GetNationalPark", new { version = HttpContext.GetRequestedApiVersion().ToString(), id = nationalParkObj.Id}, nationalParkObj);
     }
 
     [HttpPatch("{nationalParkId:int}", Name = "UpdateNationalPark")]

@@ -13,7 +13,9 @@ using Microsoft.Extensions.Logging;
 namespace dotnetCoreAPI.Controllers
 {
   [ApiController]
-  [Route("api/trails")]
+  // [Route("api/trails")]
+  [Route("api/v{version:apiVersion}/trails")]
+  [ApiVersion("1.0")]
   // [ApiExplorerSettings(GroupName = "ParkyOpenAPISpecT")]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailsController : ControllerBase
@@ -54,7 +56,7 @@ namespace dotnetCoreAPI.Controllers
     [ProducesResponseType(200, Type = typeof(TrailDto))]
     [ProducesResponseType(404)]
     [ProducesDefaultResponseType]
-    public IActionResult GetNationalPark(int trailId)
+    public IActionResult GetTrail(int trailId)
     {
       var obj = _trailRepository.GetTrail(trailId);
       if (obj == null)
@@ -63,6 +65,26 @@ namespace dotnetCoreAPI.Controllers
       }
 
       var objDto = _mapper.Map<TrailDto>(obj);
+      return Ok(objDto);
+    }
+
+    [HttpGet("[action]/{NationalParkId:int}", Name = "GetTrailsInNationalPark")]
+    [ProducesResponseType(200, Type = typeof(TrailDto))]
+    [ProducesResponseType(404)]
+    [ProducesDefaultResponseType]
+    public IActionResult GetTraiInNationalPark(int nationalParkId)
+    {
+      var objList = _trailRepository.GetTrailsInNationalPark(nationalParkId);
+      if (objList == null)
+      {
+        return NotFound();
+      }
+      var objDto = new List<TrailDto>();
+      foreach(var obj in objList)
+      {
+        objDto.Add(_mapper.Map<TrailDto>(obj));
+      }
+
       return Ok(objDto);
     }
 

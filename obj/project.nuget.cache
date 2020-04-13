@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "auulCyFY8CXTd9AbTXyERKaCMxsxAdrHxAR2F4jaALbg7Jru8U/5h2WwnEDSWCaM9n4yt4ZI7zx2qwc0GzI5Rw==",
+  "dgSpecHash": "rNQCqHNQfN/dVCooc+a6iDwazRqV9n5Xj5p+yB67Oa8XdWSpBHWVFy3oi0vSSZahsQB49SKVOyX545a7qgnRSw==",
   "success": true,
   "projectFilePath": "/Users/mark/Desktop/code/dotnetCoreAPI/dotnetCoreAPI.csproj",
   "expectedPackageFiles": [
     "/Users/mark/.nuget/packages/automapper/9.0.0/automapper.9.0.0.nupkg.sha512",
     "/Users/mark/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/7.0.0/automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
     "/Users/mark/.nuget/packages/microsoft.aspnetcore.mvc.versioning/4.1.1/microsoft.aspnetcore.mvc.versioning.4.1.1.nupkg.sha512",
+    "/Users/mark/.nuget/packages/microsoft.aspnetcore.mvc.versioning.apiexplorer/4.1.1/microsoft.aspnetcore.mvc.versioning.apiexplorer.4.1.1.nupkg.sha512",
     "/Users/mark/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.0/microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
     "/Users/mark/.nuget/packages/microsoft.bcl.hashcode/1.1.0/microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "/Users/mark/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
