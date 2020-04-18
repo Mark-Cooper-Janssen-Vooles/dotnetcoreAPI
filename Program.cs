@@ -13,6 +13,7 @@ namespace dotnetCoreAPI
     {
         public static void Main(string[] args)
         {
+            System.Console.WriteLine("hello");
             CreateHostBuilder(args).Build().Run();
         }
 

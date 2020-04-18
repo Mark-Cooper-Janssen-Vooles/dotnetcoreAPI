@@ -8,7 +8,7 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "dotnet build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/netcoreapp3.0/dotnetCoreAPI.dll",
             "args": [],
@@ -32,5 +32,6 @@
             "request": "attach",
             "processId": "${command:pickProcess}"
         }
-    ]
+    ],
+    "requireExactSource": "false"
 }

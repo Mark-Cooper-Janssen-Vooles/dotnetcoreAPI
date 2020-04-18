@@ -9,6 +9,7 @@ using dotnetCoreAPI.Models.Dtos;
 using dotnetCoreAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnetCoreAPI.Controllers
 {
@@ -56,6 +57,7 @@ namespace dotnetCoreAPI.Controllers
     [ProducesResponseType(200, Type = typeof(TrailDto))]
     [ProducesResponseType(404)]
     [ProducesDefaultResponseType]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetTrail(int trailId)
     {
       var obj = _trailRepository.GetTrail(trailId);

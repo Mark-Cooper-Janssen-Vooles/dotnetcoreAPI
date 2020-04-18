@@ -313,4 +313,85 @@ Enable users to be authorized => create a user.cs model
 run migrations / update
 create IUserRepository and UserRepository
 
-**up to 78
+General flow: 
+=> Add model "User"
+=> Add iRepository "IUserRepository"
+=> Add repository "UserRepository"
+=> In startup.cs add ``services.AddScoped<IUserRepository, UserRepository>();``
+
+Secret Key / Bearer:
+=> Need to configure secret key when dealing with tokens, add to appsettings.json!
+=> Create a new cs folder in root, needs to be called "AppSettings" (what it was called in the appsettings json file), and get/set the key inside (called "Secret" in json file)!
+=> In startup.cs add ``services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));``
+=> need to ``dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer``
+=> need to add the following to startup.cs configureServices: 
+````
+var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection); //this will configure the AppSettings class with whatever we put in appsettings.json!
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret); //gets the string out of json file
+
+            services.AddAuthentication(x => 
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+````
+=> need to add the following to startup.cs configure pipeline: 
+````
+ app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+);
+app.UseAuthentication(); //need to add authentication before authorization. order matters in this pipeline
+app.UseAuthorization();
+````
+=> also need to add services.AddCors(); (he adds it to the top!)
+
+=> used sql commands to make new user id 1, "1", "1", "1"
+
+
+Assigning [Authorization(Role="Admim")] :
+When a user signs up, we can assign their role = "Admin" like so: 
+````cs
+public User Register(string username, string password)
+    {
+      User userObj = new User()
+      {
+        Username = username,
+        Password = password,
+        Role = "Admin"
+      };
+
+      _db.Users.Add(userObj);
+      _db.SaveChanges();
+      userObj.Password = "********";
+      return userObj;
+    }
+````
+HOWEVER, the API auth is based in the token. So we have to let the token know the user as this role. 
+````cs
+   var tokenDescriptor = new SecurityTokenDescriptor
+      {
+        Subject = new ClaimsIdentity(new Claim[]{
+          new Claim(ClaimTypes.Name, user.Id.ToString()),
+          new Claim(ClaimTypes.Role, user.Role) //this line here does this!
+        }),
+        Expires = DateTime.UtcNow.AddDays(7),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+      };
+````
+
