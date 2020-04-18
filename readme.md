@@ -1,13 +1,16 @@
 # RESTful dotnet Core API 
 
-## To get it running
-- ``docker ps`` to check if docker container is running, if it isnt: ``docker start sql_server_dotnetAPI_demo``
-- to see inside database type: ``mssql -d 'Parky' -u sa -p reallyStrongPwd123`` (where 'Parky' is the name of the database)
-- to perform a query, type: ``SELECT * FROM NationalParks`` (sql stuff)
+#### Basic Steps / Content: 
+- Create api
+- Setup database connection
+- Make repositories + DTO's
+- Create controllers + check gets / posts etc work in postman
+- Install Swashbuckle + Swagger + Add XML comments
+- Authenticate with admin user
 
 api means "Application Programming Interface" => a software intermediary that allows two applications to talk to each other
 
-It works via request and response
+An API works via request and response
 
 ### The request object
 verb
@@ -66,7 +69,6 @@ Content:
   - HTML, CSS, XML, JSON
   - Blobs etc.
 
-
 ## Creating project
 mkdir fileName
 cd fileName
@@ -76,30 +78,49 @@ on side menu on the > icon, click and then click "run" with .NET Core selected
 
 ===
 
-to start new files off: create a folder like normal in vs code, then create a class simply type "className.cs", remember to setup the namespace.
+
+#### Create project: ``dotnet new webapi``
+
+#### Create model: New folder in root "Models" => make new file NationalPark.cs & fill it out
+
+#### Setup database connection: 
+
+(tutorial uses sql server, i needed to run it on docker for mac)
+
+  - get a database setup in docker: 
+    - ``sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=reallyStrongPwd123" -p 1448:1448 --name sqlDb2 -d microsoft/mssql-server-linux``
+
+  - in appsettings.json: 
+  ````
+    "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1444;Database=Parky2;User Id=SA;Password=reallyStrongPwd123;"
+  },
+  ````
+  - create new folder in root "Data" => make new file ApplicationDbContext.cs
+    - when inheriting from DbContext need to ``dotnet add package Microsoft.EntityFrameworkCore.SqlServer``
+    - fill out ApplicationDbContext.cs
+
+  - in startup.cs in configureservices, add: ``sservices.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));`` (this looks inside appsettings.json for whats under "defaultConnection"!)
+    - to usesqlserver, need to ``dotnet add package microsoft.entityframeworkcore.sqlserver``
+
+  - run ``dotnet add package Microsoft.EntityFrameworkCore.Tools``
+  - to start creating db, run ``dotnet ef migrations add NationalPark`` (similar to rails, makes a migration!)
+  - run ``dotnet ef database update``
+
+## To get it running
+Note: Had to use docker as mysql is windows or linux only. 
+- ``docker ps`` to check if docker container is running, if it isnt: ``docker start sql_server_dotnetAPI_demo``
+- to see inside database type: ``mssql -d 'Parky' -u sa -p reallyStrongPwd123`` (where 'Parky' is the name of the database)
+- to perform a query, type: ``SELECT * FROM NationalParks`` (sql stuff)
+
+
+
 
 to install a package, need to type in the console: ``"dotnet add package Microsoft.EntityFrameworkCore"`` for example, which will add it to the csproj file.
 
 to fix red underlined stuff, click on it then go command + . 
 
 ===
-
-### Database stuff
-
-(he uses sql server, i needed to run it on docker)
-
-in startup.cs options.usesqlserver needs ``"dotnet add package Microsoft.EntityFrameworkCore.SqlServer"``
-
-in appsettings.json for a sqlserver hosted in docker, need to use something like: 
-``"DefaultConnection": "Server=localhost,1433;Database=Parky;User Id=SA;Password=reallyStrongPwd123;"``
-
-"Add-Migration dbName" doesn't work in vs code, need to: 
-``dotnet ef migrations add dbName``
-=> might need to install dotnet ef seperately? its globally installed now on the mac tho, if need to install its ``dotnet tool install --global dotnet-ef``
-
-it will generate a migrations folder, he recommends moving it into the data folder. won't actually update the tables in databae though, need to run
-``dotnet ef database update``
-==> the above command will officially add it to the database
 
 
 DTO's: 
@@ -325,7 +346,7 @@ Secret Key / Bearer:
 => In startup.cs add ``services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));``
 => need to ``dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer``
 => need to add the following to startup.cs configureServices: 
-````
+````cs
 var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection); //this will configure the AppSettings class with whatever we put in appsettings.json!
 
@@ -350,7 +371,7 @@ var appSettingsSection = Configuration.GetSection("AppSettings");
             });
 ````
 => need to add the following to startup.cs configure pipeline: 
-````
+````cs
  app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
@@ -394,4 +415,3 @@ HOWEVER, the API auth is based in the token. So we have to let the token know th
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };
 ````
-
